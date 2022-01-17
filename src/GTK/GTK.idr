@@ -107,6 +107,12 @@ gtk_menu_item_new_with_label : (label : String) -> PrimIO (Ptr GtkWidget)
 export %foreign libgtk "gtk_menu_item_set_submenu"
 gtk_menu_item_set_submenu : Ptr GtkMenuItem -> Ptr GtkWidget -> PrimIO ()
 
+-- gtk_seperator
+
+export %foreign libgtk "gtk_separator_menu_item_new"
+gtk_separator_menu_item_new : PrimIO (Ptr GtkWidget)
+
+
 -- gtk_box
 
 export %foreign libgtk "gtk_box_pack_start"
