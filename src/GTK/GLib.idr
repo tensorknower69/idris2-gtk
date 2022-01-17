@@ -32,8 +32,7 @@ GClosureNotify = AnyPtr -> Ptr GClosure -> PrimIO ()
 export
 data GObject : Type where
 
-export
-%foreign libglib "g_signal_connect_data"
+export %foreign libglib "g_signal_connect_data"
 g_signal_connect_data : Ptr GObject -> (detailed_signal : String) -> GCallback -> (data_ : AnyPtr) -> GConnectFlags -> GClosureNotify -> PrimIO Int
 
 export
