@@ -9,6 +9,14 @@ export
 data GtkWidget : Type where
 
 public export
+GtkWindow, GtkBox, GtkContainer, GtkMenuItem, GtkMenuShell : Type
+GtkWindow = GtkWidget
+GtkBox = GtkWidget
+GtkContainer = GtkWidget
+GtkMenuItem = GtkWidget
+GtkMenuShell = GtkWidget
+
+public export
 GtkWindowType : Type
 GtkWindowType  = Int
 
@@ -29,15 +37,17 @@ GTK_ALIGN_END = 2
 GTK_ALIGN_CENTER = 3
 GTK_ALIGN_BASELINE = 4
 
--- gtk_init
+public export
+GtkWindowPosition : Type
+GtkWindowPosition = Int
 
-export %foreign libgtk "gtk_init"
-gtk_init : (argc : Ptr Int) -> (argv : Ptr String) -> PrimIO ()
-
--- gtk_widget
-
-export %foreign libgtk "gtk_widget_show"
-gtk_widget_show : Ptr GtkWidget -> PrimIO ()
+public export
+GTK_WIN_POS_NONE, GTK_WIN_POS_CENTER, GTK_WIN_POS_MOUSE, GTK_WIN_POS_CENTER_ALWAYS, GTK_WIN_POS_CENTER_ON_PARENT : GtkWindowPosition
+GTK_WIN_POS_NONE = 0
+GTK_WIN_POS_CENTER = 1
+GTK_WIN_POS_MOUSE = 2
+GTK_WIN_POS_CENTER_ALWAYS = 3
+GTK_WIN_POS_CENTER_ON_PARENT = 4
 
 -- gtk_window
 
@@ -45,33 +55,69 @@ export %foreign libgtk "gtk_window_new"
 gtk_window_new : GtkWindowType -> PrimIO (Ptr GtkWidget)
 
 export %foreign libgtk "gtk_window_set_title"
-gtk_window_set_title : Ptr GtkWidget -> String -> PrimIO ()
+gtk_window_set_title : Ptr GtkWindow -> String -> PrimIO ()
 
 export %foreign libgtk "gtk_window_set_default_size"
-gtk_window_set_default_size : Ptr GtkWidget -> Int -> Int -> PrimIO ()
+gtk_window_set_default_size : Ptr GtkWindow -> Int -> Int -> PrimIO ()
+
+export %foreign libgtk "gtk_window_set_default_size"
+gtk_window_set_position : Ptr GtkWindow -> GtkWindowPosition -> PrimIO ()
 
 -- gtk_button
 
 export %foreign libgtk "gtk_button_new_with_label"
 gtk_button_new_with_label : String -> PrimIO (Ptr GtkWidget)
 
+export %foreign libgtk "gtk_button_new_with_mnemonic"
+gtk_button_new_with_mnemonic : String -> PrimIO (Ptr GtkWidget)
+
 -- gtk_alignment
 
 export %foreign libgtk "gtk_alignment_new"
-gtk_alignment_new : Int -> Int -> Int -> Int -> PrimIO (Ptr GtkWidget)
+gtk_alignment_new : (xalign : Int) -> (yalign : Int) -> (xscale : Int) -> (yscale : Int) -> PrimIO (Ptr GtkWidget)
 
 -- gtk_container
 
 export %foreign libgtk "gtk_container_add"
-gtk_container_add : Ptr GtkWidget -> Ptr GtkWidget -> PrimIO ()
+gtk_container_add : Ptr GtkContainer -> Ptr GtkWidget -> PrimIO ()
 
 export %foreign libgtk "gtk_container_set_border_width"
-gtk_container_set_border_width : Ptr GtkWidget -> Int -> PrimIO ()
+gtk_container_set_border_width : Ptr GtkContainer -> Int -> PrimIO ()
+
+-- gtk_menu
+
+export %foreign libgtk "gtk_menu_new"
+gtk_menu_new : PrimIO (Ptr GtkWidget)
+
+-- gtk_menu_bar
+
+export %foreign libgtk "gtk_menu_bar_new"
+gtk_menu_bar_new : PrimIO (Ptr GtkWidget)
+
+-- gtk_menu_shell
+
+export %foreign libgtk "gtk_menu_shell_append"
+gtk_menu_shell_append : Ptr GtkMenuShell -> (child : Ptr GtkWidget) -> PrimIO ()
+
+-- gtk_menu_item
+
+export %foreign libgtk "gtk_menu_item_new_with_label"
+gtk_menu_item_new_with_label : (label : String) -> PrimIO (Ptr GtkWidget)
+
+export %foreign libgtk "gtk_menu_item_set_submenu"
+gtk_menu_item_set_submenu : Ptr GtkMenuItem -> Ptr GtkWidget -> PrimIO ()
+
+-- gtk_box
+
+export %foreign libgtk "gtk_box_pack_start"
+gtk_box_pack_start : Ptr GtkBox -> Ptr GtkWidget -> (expand : CBool) -> (fill : CBool) -> (padding : Int) -> PrimIO ()
+
+-- gtk_vbox
+
+export %foreign libgtk "gtk_vbox_new"
+gtk_vbox_new : (homogeneous : CBool) -> (spacing : Int) -> PrimIO (Ptr GtkWidget)
 
 -- gtk_widget
-
-export %foreign libgtk "gtk_widget_show_all"
-gtk_widget_show_all : Ptr GtkWidget -> PrimIO ()
 
 export %foreign libgtk "gtk_widget_set_tooltip_text"
 gtk_widget_set_tooltip_text : Ptr GtkWidget -> String -> PrimIO ()
@@ -81,6 +127,17 @@ gtk_widget_set_halign : Ptr GtkWidget -> GtkAlign -> PrimIO ()
 
 export %foreign libgtk "gtk_widget_set_valign"
 gtk_widget_set_valign : Ptr GtkWidget -> GtkAlign -> PrimIO ()
+
+export %foreign libgtk "gtk_widget_show_all"
+gtk_widget_show_all : Ptr GtkWidget -> PrimIO ()
+
+export %foreign libgtk "gtk_widget_show"
+gtk_widget_show : Ptr GtkWidget -> PrimIO ()
+
+-- gtk_init
+
+export %foreign libgtk "gtk_init"
+gtk_init : (argc : Ptr Int) -> (argv : Ptr String) -> PrimIO ()
 
 -- gtk_main
 
